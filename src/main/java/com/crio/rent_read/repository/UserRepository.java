@@ -1,5 +1,13 @@
 package com.crio.rent_read.repository;
 
-public class UserRepository {
+import com.crio.rent_read.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+  Optional<User> findByEmail(String email);
+  boolean existsByEmail(String email);
 }
