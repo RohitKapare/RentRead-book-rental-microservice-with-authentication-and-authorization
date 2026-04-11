@@ -1,4 +1,4 @@
-package com.crio.rentread.entity.enums;
+package com.crio.rent_read.entity.enums;
 
 public enum AvailabilityStatus {
   AVAILABLE,

@@ -1,4 +1,4 @@
-package com.crio.rentread.entity;
+package com.crio.rent_read.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

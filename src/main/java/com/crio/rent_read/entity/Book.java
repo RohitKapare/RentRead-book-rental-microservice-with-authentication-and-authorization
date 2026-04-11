@@ -1,7 +1,7 @@
-package com.crio.rentread.entity;
+package com.crio.rent_read.entity;
 
-import com.crio.rentread.entity.enums.AvailabilityStatus;
-import com.crio.rentread.entity.enums.Genre;
+import com.crio.rent_read.entity.enums.AvailabilityStatus;
+import com.crio.rent_read.entity.enums.Genre;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.crio.rentread;
+package com.crio.rent_read;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

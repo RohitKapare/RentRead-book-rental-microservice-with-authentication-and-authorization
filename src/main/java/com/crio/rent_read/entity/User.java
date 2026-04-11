@@ -1,6 +1,6 @@
-package com.crio.rentread.entity;
+package com.crio.rent_read.entity;
 
-import com.crio.rentread.entity.enums.Role;
+import com.crio.rent_read.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
