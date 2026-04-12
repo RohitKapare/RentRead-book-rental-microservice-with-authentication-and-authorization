@@ -13,14 +13,13 @@ import com.crio.rent_read.repository.BookRepository;
 import com.crio.rent_read.repository.RentalRepository;
 import com.crio.rent_read.repository.UserRepository;
 import com.crio.rent_read.service.RentalService;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +70,8 @@ public class RentalServiceImpl implements RentalService {
         .build();
 
     Rental savedRental = rentalRepository.save(rental);
-    log.info("Book {} rented successfully by user {}. Rental id: {}", bookId, userId, savedRental.getId());
+    log.info("Book {} rented successfully by user {}. Rental id: {}", bookId, userId,
+        savedRental.getId());
 
     return rentalMapper.toRentalResponse(savedRental);
   }
