@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -105,5 +106,17 @@ public class GlobalExceptionHandler {
         .localDateTime(LocalDateTime.now())
         .build();
     return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(
+      HttpMessageNotReadableException ex) {
+    log.error("Malformed JSON or invalid field value: {}", ex.getMessage());
+    ErrorResponse error = ErrorResponse.builder()
+        .message("Invalid request body: " + ex.getMostSpecificCause().getMessage())
+        .httpStatus(HttpStatus.BAD_REQUEST)
+        .localDateTime(LocalDateTime.now())
+        .build();
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 }
