@@ -32,13 +32,13 @@ public class AuthServiceImpl implements AuthService {
     log.info("Registering new user with email: {}", signupRequest.getEmail());
 
     if (userRepository.existsByEmail(signupRequest.getEmail())) {
-      throw new DuplicateResourceException("User with email " + signupRequest.getEmail() + " already exists");
+      throw new DuplicateResourceException(
+          "User with email " + signupRequest.getEmail() + " already exists");
     }
 
     User user = userMapper.toUser(signupRequest);
     user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
 
-    // Default role to USER if not specified
     if (signupRequest.getRole() == null) {
       user.setRole(Role.USER);
     }
