@@ -1,0 +1,939 @@
+{
+  "info": {
+    "_postman_id": "rentread-api-collection-001",
+    "name": "RentRead API Collection",
+    "description": "Complete Postman collection for testing the RentRead Online Book Rental REST API.\n\nBase URL: http://localhost:8081\nAuth: HTTP Basic Authentication\n\n## Testing Order:\n1. Register Admin & User accounts (Public)\n2. Login to verify credentials (Public)\n3. Create books as Admin (Admin Only)\n4. Browse books as User (Authenticated)\n5. Rent books as User (Authenticated)\n6. Get active rentals (Authenticated)\n7. Return books (Authenticated)\n8. Test rental limit enforcement\n9. Test authorization (User tries Admin actions)\n10. Update & Delete books as Admin",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "adminEmail",
+      "value": "admin@rentread.com",
+      "type": "string"
+    },
+    {
+      "key": "adminPassword",
+      "value": "admin123456",
+      "type": "string"
+    },
+    {
+      "key": "userEmail",
+      "value": "user.test@example.com",
+      "type": "string"
+    },
+    {
+      "key": "userPassword",
+      "value": "user123456",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{adminEmail}}\",\n    \"password\": \"{{adminPassword}}\",\n    \"firstName\": \"admin\",\n    \"lastName\": \"test\",\n    \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\",\n    \"firstName\": \"RegularTest\",\n    \"lastName\": \"UserTest\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register Duplicate User (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\",\n    \"firstName\": \"RegularTest\",\n    \"lastName\": \"UserTest\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login as Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{adminEmail}}\",\n    \"password\": \"{{adminPassword}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login as User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login Invalid Credentials (401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"wrong@example.com\",\n    \"password\": \"wrongpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Signup Invalid Data (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"not-an-email\",\n    \"password\": \"12\",\n    \"firstName\": \"\",\n    \"lastName\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Book Management (Admin)",
+      "item": [
+        {
+          "name": "Create Book 1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{adminEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{adminPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"The Great Gatsby\",\n    \"author\": \"F. Scott Fitzgerald\",\n    \"genre\": \"FICTION\",\n    \"availabilityStatus\": \"AVAILABLE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Book 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{adminEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{adminPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"A Brief History of Time\",\n    \"author\": \"Stephen Hawking\",\n    \"genre\": \"SCIENCE\",\n    \"availabilityStatus\": \"AVAILABLE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Book 3",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{adminEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{adminPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Murder on the Orient Express\",\n    \"author\": \"Agatha Christie\",\n    \"genre\": \"MYSTERY\",\n    \"availabilityStatus\": \"AVAILABLE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Book 1",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{adminEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{adminPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": 1,\n    \"title\": \"The Great Gatsby\",\n    \"author\": \"F. Scott Fitzgerald (Updated)\",\n    \"genre\": \"FICTION\",\n    \"availabilityStatus\": \"AVAILABLE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Book 3",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{adminEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{adminPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books/3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books",
+                "3"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Non-Existent Book (404)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{adminEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{adminPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books/99999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books",
+                "99999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Book Browsing (User)",
+      "item": [
+        {
+          "name": "Get All Books",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Book by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authorization Tests",
+      "item": [
+        {
+          "name": "User Create Book (403)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Unauthorized Book\",\n    \"author\": \"Unauthorized Author\",\n    \"genre\": \"FICTION\",\n    \"availabilityStatus\": \"AVAILABLE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books"
+              ]
+            }
+          }
+        },
+        {
+          "name": "User Update Book (403)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": 1,\n    \"title\": \"Hacked Title\",\n    \"author\": \"Hacked Author\",\n    \"genre\": \"FICTION\",\n    \"availabilityStatus\": \"AVAILABLE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "User Delete Book (403)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Unauthenticated Access (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rental Management",
+      "item": [
+        {
+          "name": "Rent Book 1 (User)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rentals/users/2/books/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rentals",
+                "users",
+                "2",
+                "books",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Rent Book 2 (User)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rentals/users/2/books/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rentals",
+                "users",
+                "2",
+                "books",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Active Rentals (User)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rentals/active-rentals/users/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rentals",
+                "active-rentals",
+                "users",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Rent 3rd Book - Limit Exceeded (400)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rentals/users/2/books/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rentals",
+                "users",
+                "2",
+                "books",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Return Book (Rental 1)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rentals/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rentals",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Return Non-Existent Rental (404)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rentals/99999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rentals",
+                "99999"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Return Book (Rental 2)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{userEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{userPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rentals/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rentals",
+                "2"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Rents a Book",
+      "item": [
+        {
+          "name": "Admin Rents Book 1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{adminEmail}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{adminPassword}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rentals/users/1/books/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rentals",
+                "users",
+                "1",
+                "books",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

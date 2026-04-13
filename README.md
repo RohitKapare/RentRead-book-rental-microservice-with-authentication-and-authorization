@@ -133,6 +133,20 @@ The API will start at **`http://localhost:8081/`**.
 ./gradlew test
 ```  
 
+### Running the JAR
+
+Create the JAR file: 
+
+```bash
+./gradlew bootJar
+```
+Run the JAR:
+
+```bash
+java -jar build/libs/<Your-JAR-file-name.jar>
+```
+
+
   
 ---  
 
@@ -146,6 +160,8 @@ request:
 ```bash  
 curl -u user@example.com:password123 http://localhost:8081/books
 ```  
+
+> A ready-to-use Postman collection is included: [`Postman_collection.json`](Postman_collection.json).
 
 ### Authentication
 
