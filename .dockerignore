@@ -1,0 +1,11 @@
+.build
+.git
+.gradle
+build/
+.idea
+*.iml
+*.log
+target/
+.DS_Store
+node_modules/
+*.swp

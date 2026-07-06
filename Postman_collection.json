@@ -264,7 +264,7 @@
           }
         },
         {
-          "name": "Create Book 2",
+          "name": "Create Book 2 (Wrong Genre 400)",
           "request": {
             "method": "POST",
             "header": [

@@ -9,7 +9,48 @@ secured with Basic Authentication and role-based authorization.
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?logo=mysql&logoColor=white)  
 ![Gradle](https://img.shields.io/badge/Gradle-8.11.1-02303A?logo=gradle)
   
+
 ---  
+
+## 🐳 Running with Docker (Quick Start)
+
+### Implemented Docker Features
+- Multi-stage docker build with docker-compose to orchestrate multi-container environment.
+- Integrated container **healthchecks** to manage boot-order dependencies gracefully.
+- **Isolated Docker networks** to mitigate local host port contention and enhance security.
+
+### Prerequisites
+* Ensure [Docker](https://www.docker.com/get-started) and Docker Compose are installed and running.
+
+### Setup & Execution
+
+**1. Clone the repository and cd into root folder.**
+```bash
+git clone https://github.com/RohitKapare/RentRead-book-rental-microservice-with-authentication-and-authorization.git
+cd RentRead-book-rental-microservice-with-authentication-and-authorization
+```
+**2. Build and launch container in detached mode**
+```bash
+docker compose up --build -d
+```
+API will listen on **`http://localhost:8081`**.
+
+**3. Testing the endpoints:**
+Import [`Postman_collection.json`](Postman_collection.json) in postman to test endpoints.
+
+**4. Cleanup:**
+
+Standard Reset (Stops containers and wipes the localized database volume cleanly):
+```bash
+docker compose down -v
+```
+Deep Clean (Wipes the volume _and_ purges the locally built custom application image):
+```bash
+docker compose down -v --rmi local
+```
+
+---
+
 
 ## Key Features
 
